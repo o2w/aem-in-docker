@@ -10,13 +10,17 @@ COPY license.properties .
 # Copy Quickstart jar file
 COPY cq-quickstart-6.5.0.jar cq-quickstart.jar
 
-# Install Java
-RUN apt-get update && \
-    apt-get install -y curl && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository ppa:openjdk-r/ppa && \
-    apt-get update && \
-    apt-get install -y openjdk-8-jdk
+COPY jdk-11.0.17_linux-x64_bin.deb /tmp/jdk-11.0.17_linux-x64_bin.deb
 
-# Unack the Jar file
-RUN java -jar cq-quickstart.jar -unpack
+# Install Java
+# https://stackoverflow.com/a/54925400
+RUN apt-get update && \
+    apt-get install -y libasound2 && \
+    dpkg -i /tmp/jdk-11.0.17_linux-x64_bin.deb && \
+    update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 1
+
+# https://stackoverflow.com/questions/43655291/dynamically-set-java-home-of-docker-container
+RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
+    echo $JAVA_HOME && \
+    java --version && \
+    java -jar cq-quickstart.jar -unpack
