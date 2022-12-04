@@ -5,14 +5,23 @@ FROM httpd:2.4
 WORKDIR /usr/src/app
 
 # Get the dispacher tar file and keepit inside 'dispacher' folder
-ADD https://www.adobeaemcloud.com/content/companies/public/adobe/dispatcher/dispatcher/_jcr_content/top/download_8/file.res/dispatcher-apache2.4-linux-x86-64-4.2.3.tar.gz ./dispatcher/
+# https://experienceleague.adobe.com/docs/experience-manager-dispatcher/using/getting-started/release-notes.html?lang=en#system-requirements-and-prerequisites
+ADD https://download.macromedia.com/dispatcher/download/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz ./dispatcher/
 
 # Extract the tar file and move it to Apache Modules folder with name mod_dispacher.so
-RUN tar -xzvf ./dispatcher/dispatcher-apache2.4-linux-x86-64-4.2.3.tar.gz -C ./dispatcher && \
-    cp ./dispatcher/dispatcher-apache2.4-4.2.3.so /usr/local/apache2/modules/mod_dispatcher.so
+RUN tar -xzvf ./dispatcher/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz -C ./dispatcher && \
+    cp ./dispatcher/dispatcher-apache2.4-4.3.5.so /usr/local/apache2/modules/mod_dispatcher.so
 
 # Copy the dispacher.any file in to the Image in the below path
-COPY dispatcher.any /usr/local/apache2/conf/dispatcher.any
+#COPY dispatcher.any /usr/local/apache2/conf/dispatcher.any
+RUN cp ./dispatcher/conf/dispatcher.any /usr/local/apache2/conf/dispatcher.any
+RUN cp ./dispatcher/conf/author_dispatcher.any /usr/local/apache2/conf/author_dispatcher.any
+
 
 # Copy the apache configuration file in the Image and paste it into the apache configuration path as mentioned below
-COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+#COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+RUN cp ./dispatcher/conf/httpd-dispatcher.conf /usr/local/apache2/conf/extra/
+RUN echo "LoadModule dispatcher_module  modules/mod_dispatcher.so" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "Include conf/extra/httpd-dispatcher.conf" >> /usr/local/apache2/conf/httpd.conf
+
+
