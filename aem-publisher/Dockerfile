@@ -8,5 +8,8 @@ RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
     echo $JAVA_HOME && \
     java --version
 
-# Make the container start always in Publisher mode with Port 4502
-ENTRYPOINT ["java", "-jar", "cq-quickstart.jar", "-Dsling.run.modes=publisher", "-p", "4503"]
+RUN test -f "./cq-quickstart.jar" && mv ./cq-quickstart.jar ./aem-publish-p4503.jar
+
+# Make the container start always in Publisher mode with Port 4503
+#https://experienceleague.adobe.com/docs/experience-manager-learn/cloud-service/local-development-environment-set-up/aem-runtime.html?lang=en#set-up-local-aem-publish-service
+ENTRYPOINT ["java", "-jar", "aem-publish-p4503.jar" ]
