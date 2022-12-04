@@ -24,4 +24,9 @@ RUN cp ./dispatcher/conf/httpd-dispatcher.conf /usr/local/apache2/conf/extra/
 RUN echo "LoadModule dispatcher_module  modules/mod_dispatcher.so" >> /usr/local/apache2/conf/httpd.conf
 RUN echo "Include conf/extra/httpd-dispatcher.conf" >> /usr/local/apache2/conf/httpd.conf
 
+#Configure Dispatcher
+#https://stackoverflow.com/a/5171935
+RUN sed -i.bak s/127.0.0.1/aem-publish/g /usr/local/apache2/conf/author_dispatcher.any
 
+#miscs
+#https://stackoverflow.com/a/5171935
