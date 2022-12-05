@@ -1,22 +1,22 @@
 version: '3'
 services:
-  author:
-    image: author
+  default-author:
+    image: default-author
     build: ./author
     network_mode: "host"
       #ports:
       #  - "4502:4502"
-  publish:
-    image: publish
+  default-publish:
+    image: default-publish
     build: ./publish
     network_mode: "host"
       #ports:
       #  - "4503:4503"
-  dispatcher:
-    image: dispatcher
+  default-dispatcher:
+    image: default-dispatcher
     build: ./dispatcher
     network_mode: "host"
       #ports:
       #  - "80:80"
     depends_on:
-      - "publish"
+      - "default-publish"
