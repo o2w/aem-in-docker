@@ -13,6 +13,7 @@ install_package() {
 
   #await until package manager is up
   while true; do
+    sleep 2
     curl -u admin:admin http://localhost:$port/crx/packmgr/service.jsp > /dev/null || continue
     if curl -u admin:admin http://localhost:$port/crx/packmgr/service.jsp | grep -iE '<status code="?200"?>ok' ; then
       break
