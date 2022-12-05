@@ -2,3 +2,5 @@ aem-base_image/cq-quickstart-6.5.0.jar
 aem-base_image/cq-quickstart-6.5.0.zip
 aem-base_image/jdk-11.0.17_linux-x64_bin.deb
 aem-base_image/license.properties
+
+*/packages
