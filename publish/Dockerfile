@@ -1,5 +1,5 @@
-# Use the previously created aem-base-image
-FROM aem-base-image
+# Use the previously created aem6.5.0
+FROM aem6.5.0
 
 # Expose AEM Publisher in port 4502
 EXPOSE 4503
