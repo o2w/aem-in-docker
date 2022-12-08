@@ -24,3 +24,12 @@ RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
     echo $JAVA_HOME && \
     java --version && \
     java -jar cq-quickstart.jar -unpack
+
+# docker run --rm -ti --memory=24g aem6.5.0java
+#COPY *.java /src/
+#RUN mkdir /app \
+#    && ls /src \
+#    && /usr/lib/jvm/jdk-11/bin/javac /src/PrintXmxXms.java -d /app
+#CMD ["sh", "-c", \
+#     "java -version \
+#      && java -cp /app PrintXmxXms"]
