@@ -1,5 +1,8 @@
-# Use the previously created aem6.5.0
-FROM aem6.5.0
+# Use the previously created aem6.X.0
+# If you want aem6.4.0, run
+# docker-compose build --build-arg AEM_IMAGE=aem6.4.0
+ARG AEM_IMAGE=aem6.5.0
+FROM ${AEM_IMAGE}
 
 # Expose AEM author in port 4502
 EXPOSE 4502
