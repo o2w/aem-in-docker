@@ -9,3 +9,4 @@ aem6.5.0/license.properties
 
 */packages
 custom
+*.class
