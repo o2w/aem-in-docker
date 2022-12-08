@@ -28,6 +28,7 @@ install_package() {
   echo "awaiting package installation"
   sleep 24
   while true; do
+    sleep 8
     curl -u admin:admin http://localhost:$port/crx/packmgr/service.jsp > /dev/null || continue
     curl -u admin:admin http://localhost:$port/crx/packmgr/service.jsp | grep -iE '<status code="?200"?>ok' && break
     echo "still awaiting package installation"
