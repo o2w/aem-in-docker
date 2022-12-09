@@ -7,6 +7,8 @@ MAKE_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 PREPARED_DOCKER_COMPOSE_YML=.prepared.docker-compose.yml
 
+PROJECT=test
+
 test: ## print test message
 	@echo 20180508
 	@echo 2018/05/09
@@ -22,6 +24,17 @@ build:
 	@make -s prepare-docker-compose-yml
 #	@cat /tmp/docker-compose.yml
 	@docker-compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM_IMAGE=aem${AEM_VERSION}
+
+up:
+	@make -s prepare-docker-compose-yml
+	@mkdir -p custom/${PROJECT} && \
+		cd custom/${PROJECT} && \
+		pwd && \
+		cp -rav ${MAKE_ROOT}/${PREPARED_DOCKER_COMPOSE_YML} ./docker-compose.yml && \
+		dir=author; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
+		dir=publish; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
+		dir=dispatcher; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
+		docker-compose up
 
 tmp:
 	@make -s prepare-docker-compose-yml
