@@ -36,6 +36,10 @@ tmp:
 rmtmp:
 	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
 
+cc: # Clone Containers
+	@make -s prepare-docker-compose-yml
+	@./clone-containers.sh ${CONTAINER_KEY}
+
 
 .PHONY: help
 

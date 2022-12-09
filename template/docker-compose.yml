@@ -1,0 +1,16 @@
+version: '3'
+services:
+  author:
+    image: {{AUTHOR}}
+    build: ./author
+    network_mode: "host"
+  publish:
+    image: {{PUBLISH}}
+    build: ./publish
+    network_mode: "host"
+  dispatcher:
+    image: {{DISPATCHER}}
+    build: ./dispatcher
+    network_mode: "host"
+    depends_on:
+      - "publish"
