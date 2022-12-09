@@ -36,7 +36,7 @@ up:
 		dir=dispatcher; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		docker-compose up
 
-tmp:
+tup: #Temporary UP
 	@make -s prepare-docker-compose-yml
 	@cd `mktemp -d` && \
 		pwd && \
@@ -49,9 +49,9 @@ tmp:
 rmtmp:
 	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
 
-cc: # Clone Containers
+disposable: # Create such images & containers & up
 	@make -s prepare-docker-compose-yml
-	@./clone-containers.sh ${CONTAINER_KEY}
+	@./clone-containers.sh "${PROJECT}"
 
 
 .PHONY: help
