@@ -19,10 +19,11 @@ get_docker_tag() {
 }
 
 run_single_container() {
-  echo "running $1"
+  echo "Initiating disposable $1" >&2
   local readonly container_id=`docker ps -a | grep $1 | awk '{print $1}'`
-  echo $container_id
+  echo "container_id=$container_id" >&2
   local readonly image=`docker ps -a | grep $1 | awk '{print $2}'`
+  echo 'docker committing. It may take a while..' >&2
   local readonly commit=$(docker commit $container_id)
   docker_tag `get_image_id $commit` 'disposable'
   local readonly tag=$(get_docker_tag `get_image_id $commit` 'disposable')
