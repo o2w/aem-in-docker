@@ -18,7 +18,23 @@ get_docker_tag() {
   echo "${tmpdirbasename}_${container_keyword}_${2}"
 }
 
+run_single_container() {
+  echo "running $1"
+  local readonly container_id=`docker ps -a | grep $1 | awk '{print $1}'`
+  echo $container_id
+  local readonly image=`docker ps -a | grep $1 | awk '{print $2}'`
+  local readonly commit=$(docker commit $container_id)
+  docker_tag `get_image_id $commit` 'disposable'
+  local readonly tag=$(get_docker_tag `get_image_id $commit` 'disposable')
+  echo $tag
+  docker run --rm --network="host" --privileged  --cap-add=NET_ADMIN $tag
+  docker rmi "`get_image_id $commit`"
+  exit 0
+}
+
 readonly container_keyword=$1
+
+docker ps -a | grep "$container_keyword"  | wc -l | xargs -I{} test {} = 1 && run_single_container $container_keyword; exit 0
 
 docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
 
