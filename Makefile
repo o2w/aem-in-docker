@@ -56,7 +56,7 @@ rmtmp:
 
 disposable: # Create such images & containers & up
 	@make -s prepare-docker-compose-yml
-	@./clone-containers.sh "${PROJECT}"
+	@./disposable.sh "${PROJECT}"
 
 
 .PHONY: help
