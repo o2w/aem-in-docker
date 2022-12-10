@@ -14,6 +14,9 @@ test: ## print test message
 	@echo 2018/05/09
 	@echo 2018-05-11
 
+aem:
+	@docker build -t aem${AEM_VERSION} ./aem${AEM_VERSION}
+
 prepare-docker-compose-yml:
 	@cp -f docker-compose.yml ${PREPARED_DOCKER_COMPOSE_YML}
 	@sed -i.back -e 's/{{AEM_VERSION}}/${AEM_VERSION}/' ${PREPARED_DOCKER_COMPOSE_YML}
@@ -26,14 +29,16 @@ build:
 	@docker-compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM_IMAGE=aem${AEM_VERSION}
 
 up:
+	@make -s aem
+	@make -s build
 	@make -s prepare-docker-compose-yml
 	@mkdir -p custom/${PROJECT} && \
 		cd custom/${PROJECT} && \
 		pwd && \
 		cp -rav ${MAKE_ROOT}/${PREPARED_DOCKER_COMPOSE_YML} ./docker-compose.yml && \
-		dir=author; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		dir=publish; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		dir=dispatcher; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
+		dir=author; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
+		dir=publish; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
+		dir=dispatcher; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		docker-compose up
 
 tup: #Temporary UP
@@ -44,7 +49,7 @@ tup: #Temporary UP
 		dir=author; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=publish; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=dispatcher; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		docker-compose up
+		docker-compose up; docker-compose rm
 
 rmtmp:
 	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
