@@ -35,8 +35,12 @@ run_single_container() {
 
 readonly container_keyword=$1
 
-docker ps -a | grep "$container_keyword"  | wc -l | xargs -I{} test {} = 1 && run_single_container $container_keyword; exit 0
+if docker ps -a | grep "$container_keyword"  | wc -l | xargs -I{} test {} = 1; then
+  run_single_container $container_keyword
+  exit 0
+fi
 
+docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
 docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
 
 readonly author_container_id=$(docker ps -a | grep "$container_keyword" | grep -iE 'author' | awk '{print $1}')
@@ -78,7 +82,7 @@ cat docker-compose.yml
 cat ./**/Dockerfile
 
 docker-compose up
-docker-compose rm
+docker-compose rm -f
 
 docker rmi "`get_image_id $author_commit`"
 docker rmi "`get_image_id $publish_commit`"
