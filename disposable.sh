@@ -40,8 +40,8 @@ if docker ps -a | grep "$container_keyword"  | wc -l | xargs -I{} test {} = 1; t
   exit 0
 fi
 
-docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
-docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
+#docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
+docker ps -a | grep "$container_keyword" | grep -iE "${container_keyword}"_'(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
 
 readonly author_container_id=$(docker ps -a | grep "$container_keyword" | grep -iE 'author' | awk '{print $1}')
 readonly publish_container_id=$(docker ps -a | grep "$container_keyword" | grep -iE 'publish' | awk '{print $1}')
