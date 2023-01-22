@@ -6,6 +6,8 @@ else
   port=4503
 fi
 
+srcdir=$2
+
 install_package() {
   package="$1"
 
@@ -40,7 +42,7 @@ install_package() {
 echo "Package manager confirmed up" >&2
 
 #~/Downloads/aem/src/packages/sp/aem-service-pkg-6.5.9-1.0.zip
-servicepack="`find . -type f -iname "aem-service-pkg*.zip" | head -n 1`"
+servicepack="`find $srcdir -type f -iname "aem-service-pkg*.zip" | head -n 1`"
 
 curl -u admin:admin -F cmd=ls http://localhost:$port/crx/packmgr/service.jsp | grep '<name>aem-service-pkg'
 if [ $? = 1 ]; then
@@ -50,7 +52,7 @@ fi
 
 #open http://localhost:$port/crx/packmgr/index.jsp
 #https://helpx.adobe.com/experience-manager/kb/common-AEM-Curl-commands.html
-ls $1/packages/*.zip | grep -v 'aem-service-pkg' | grep -v 'cq-quickstart' | while read p; do
+ls $srcdir/*.zip | grep -v 'aem-service-pkg' | grep -v 'cq-quickstart' | while read p; do
   install_package $p
 done
 #ls $src/packages/sp/*.zip | while read p; do
