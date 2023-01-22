@@ -7,7 +7,7 @@ EXPOSE 4503
 
 RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
     echo $JAVA_HOME && \
-    java --version
+    java -version
 
 RUN test -f "./cq-quickstart.jar" && mv ./cq-quickstart.jar ./aem-publish-p4503.jar
 
