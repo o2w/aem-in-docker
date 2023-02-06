@@ -9,8 +9,9 @@ WORKDIR /usr/src/app
 ADD https://download.macromedia.com/dispatcher/download/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz ./dispatcher/
 
 # Extract the tar file and move it to Apache Modules folder with name mod_dispacher.so
-RUN tar -xzvf ./dispatcher/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz -C ./dispatcher && \
-    cp ./dispatcher/dispatcher-apache2.4-4.3.5.so /usr/local/apache2/modules/mod_dispatcher.so
+RUN tar -xzvf ./dispatcher/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz -C ./dispatcher
+RUN mv ./dispatcher/dispatcher-apache2.4-4.3.5.so /usr/local/apache2/modules/mod_dispatcher.so
+RUN ls /usr/local/apache2/modules/mod_dispatcher.so
 
 # Copy the dispacher.any file in to the Image in the below path
 #COPY dispatcher.any /usr/local/apache2/conf/dispatcher.any
