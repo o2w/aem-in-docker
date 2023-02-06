@@ -3,14 +3,20 @@ services:
   author:
     image: {{AUTHOR}}
     build: ./author
-    network_mode: "host"
+      #network_mode: "host"
+    ports:
+      - "4502:4502"
   publish:
     image: {{PUBLISH}}
     build: ./publish
-    network_mode: "host"
+      #network_mode: "host"
+    ports:
+      - "4503:4503"
   dispatcher:
     image: {{DISPATCHER}}
     build: ./dispatcher
-    network_mode: "host"
+      #network_mode: "host"
+    ports:
+      - "80:80"
     depends_on:
       - "publish"
