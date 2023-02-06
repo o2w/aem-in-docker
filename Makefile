@@ -13,6 +13,7 @@ test: ## print test message
 	@echo 20180508
 	@echo 2018/05/09
 	@echo 2018-05-11
+	@dir=hoge; echo $$dir
 
 aem:
 	@docker build -t aem${AEM_VERSION} ./aem${AEM_VERSION}
@@ -35,7 +36,7 @@ up:
 	@mkdir -p custom/${PROJECT} && \
 		cd custom/${PROJECT} && \
 		pwd && \
-		cp -rav ${MAKE_ROOT}/${PREPARED_DOCKER_COMPOSE_YML} ./docker-compose.yml && \
+		cp -av ${MAKE_ROOT}/${PREPARED_DOCKER_COMPOSE_YML} ./docker-compose.yml && \
 		dir=author; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=publish; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=dispatcher; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
