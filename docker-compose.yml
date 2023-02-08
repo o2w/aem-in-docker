@@ -3,6 +3,12 @@ services:
   author:
     image: author{{AEM_VERSION}}
     build: {{MAKE_ROOT}}/author
+      #https://stackoverflow.com/questions/50859635/how-to-tell-docker-on-mac-to-use-host-network-for-all-purpose
+      #There is unacceptable side effect in absent of network_mode: "host" But there is no way to make it fine in Docker Desktop on mac. It sucks & better to move linux after all
+      #
+      #find publish ip address in order to update Replication Agent Configration without network_mode: "host". From Author Container, localhost:4503 would not point the right one
+      #docker ps | grep publish | awk '{print $1}' | xargs -I{} docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
+      #
       #network_mode: "host"
     ports:
       - "4502:4502"
@@ -15,6 +21,16 @@ services:
   dispatcher:
     image: dispatcher{{AEM_VERSION}}
     build: {{MAKE_ROOT}}/dispatcher
+      #https://experienceleague.adobe.com/docs/experience-manager-dispatcher/using/getting-started/dispatcher-install.html?lang=en
+      #Even followed instruction above, It does not cache anything on publish instance. Without network_mode: "host", Containers would not be able to point each other as localhost?
+      #They have to specific ip address instead of localhost in order to point other ones. But it's unacceptable. 
+      #
+      #some issues in apachectl restart. 
+      #https://www.google.com/search?q=httpd.conf%3A+Cannot+load+modules%2Fmod_dispatcher.so+into+server%3A+%2Fusr%2Flocal%2Fapache2%2Fmodules%2Fmod_dispatcher.so%3A+cannot+open+shared+object+file%3A+No+such+file+or+directory&oq=httpd.conf%3A+Cannot+load+modules%2Fmod_dispatcher.so+into+server%3A+%2Fusr%2Flocal%2Fapache2%2Fmodules%2Fmod_dispatcher.so%3A+cannot+open+shared+object+file%3A+No+such+file+or+directory
+      #AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.21.0.4. Set the 'ServerName' directive globally to suppress this message
+      #https://onoredekaiketsu.com/apache-error-fully-qualified-domain-name/
+      #httpd: Syntax error on line 122 of /usr/local/apache2/conf/httpd.conf: Cannot load modules/mod_dispatcher.so into server: /usr/local/apache2/modules/mod_dispatcher.so: cannot open shared object file: No such file or directory
+      #
       #network_mode: "host"
     ports:
       - "80:80"
