@@ -42,7 +42,7 @@ fi
 
 ckw=`echo $container_keyword | tr -d '.'`
 #docker ps -a | grep "$container_keyword" | grep -iE '(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
-docker ps -a | grep "$ckw" | grep -iE "${ckw}"_'(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
+docker ps -a | grep "$ckw" | grep -iE "${ckw}"[-_]'(author|publish|dispatcher)' | wc -l | xargs -I{} test {} = 3 || exit 1
 
 readonly author_container_id=$(docker ps -a | grep "$ckw" | grep -iE 'author' | awk '{print $1}')
 readonly publish_container_id=$(docker ps -a | grep "$ckw" | grep -iE 'publish' | awk '{print $1}')
@@ -68,7 +68,7 @@ author_tag=$(get_docker_tag `get_image_id $author_commit` author)
 publish_tag=$(get_docker_tag `get_image_id $publish_commit` publish)
 dispatcher_tag=$(get_docker_tag `get_image_id $dispatcher_commit` dispatcher)
 
-cp -rav ./template/* $tmpdir/
+cp -av ./template/* $tmpdir/
 cd $tmpdir
 
 sed -i.back -e "s/{{AUTHOR}}/${author_tag}/g" docker-compose.yml
