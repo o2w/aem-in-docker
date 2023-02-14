@@ -53,6 +53,7 @@ fi
 #open http://localhost:$port/crx/packmgr/index.jsp
 #https://helpx.adobe.com/experience-manager/kb/common-AEM-Curl-commands.html
 ls $srcdir/*.zip | grep -v 'aem-service-pkg' | grep -v 'cq-quickstart' | while read p; do
+  ls -alh $p | awk '{print $5}' | grep -iE '[0-9\.]+G' && echo "$p is too large. Skipping" && continue
   install_package $p
 done
 #ls $src/packages/sp/*.zip | while read p; do
