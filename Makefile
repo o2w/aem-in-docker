@@ -57,6 +57,7 @@ rmtmp:
 
 disposable: # Create such images & containers & up
 	@make -s prepare-docker-compose-yml
+	@docker ps -a | grep  -E 'tmp.*${PROJECT}' | awk '{print $$1}' | xargs docker rm
 	@./disposable.sh "${PROJECT}"
 
 .PHONY: help
