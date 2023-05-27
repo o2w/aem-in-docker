@@ -25,6 +25,12 @@ RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
     java --version && \
     java -jar cq-quickstart.jar -unpack
 
+RUN mkdir crx-quickstart/install
+
+COPY install crx-quickstart/install
+
+#RUN export COMMERCE_ENDPOINT=https
+
 # docker run --rm -ti --memory=24g aem6.5.0java
 #COPY *.java /src/
 #RUN mkdir /app \
