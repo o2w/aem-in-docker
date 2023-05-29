@@ -72,6 +72,17 @@ local-author:
 		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
 		/usr/lib/jvm/jdk-11/bin/java -jar ./aem-author-p4502.jar -forkargs -- -Xmx2024m
 
+local-author-mac:
+	@cd `mktemp -d` && \
+		pwd && \
+		echo ${MAKE_ROOT} && \
+		java -version && \
+		cp ${MAKE_ROOT}/aemacs/aem-sdk-quickstart.jar ./cq-quickstart.jar && \
+		java -jar cq-quickstart.jar -unpack && \
+		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
+		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
+		java -jar ./aem-author-p4502.jar -forkargs -- -Xmx2024m
+
 .PHONY: help
 
 help: ## print about the targets
