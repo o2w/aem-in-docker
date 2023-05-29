@@ -60,15 +60,17 @@ disposable: # Create such images & containers & up
 	-@docker ps -a | grep  -E 'tmp.*${PROJECT}' | awk '{print $$1}' | xargs docker rm
 	@./disposable.sh "${PROJECT}"
 
-local:
+local-author:
 	@cd `mktemp -d` && \
+		pwd && \
 		echo ${MAKE_ROOT} && \
 		export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
-		java --version && \
-		cp ${MAKE_ROOT}/aem-adk-quickstart.jar ./cq-quickstart.jar && \
-		java -jar cq-quickstart.jar -unpack && \
+		/usr/lib/jvm/jdk-11/bin/java -version && \
+		cp ${MAKE_ROOT}/aemacs/aem-sdk-quickstart.jar ./cq-quickstart.jar && \
+		/usr/lib/jvm/jdk-11/bin/java -jar cq-quickstart.jar -unpack && \
 		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
-		ls
+		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
+		/usr/lib/jvm/jdk-11/bin/java -jar ./aem-author-p4502.jar -forkargs -- -Xmx2024m
 
 .PHONY: help
 

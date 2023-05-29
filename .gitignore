@@ -16,3 +16,4 @@ custom
 *.class
 .prepared.docker-compose.yml*
 aemacs/aem-sdk-dispatcher-tools-*-unix.sh
+aemacs/install
