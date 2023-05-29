@@ -60,6 +60,16 @@ disposable: # Create such images & containers & up
 	-@docker ps -a | grep  -E 'tmp.*${PROJECT}' | awk '{print $$1}' | xargs docker rm
 	@./disposable.sh "${PROJECT}"
 
+local:
+	@cd `mktemp -d` && \
+		echo ${MAKE_ROOT} && \
+		export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
+		java --version && \
+		cp ${MAKE_ROOT}/aem-adk-quickstart.jar ./cq-quickstart.jar && \
+		java -jar cq-quickstart.jar -unpack && \
+		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
+		ls
+
 .PHONY: help
 
 help: ## print about the targets
