@@ -1,6 +1,6 @@
 # template of Makefile
 #
-AEM_VERSION=6.5.0
+AEM=6.5.0
 
 #https://stackoverflow.com/questions/18136918/how-to-get-current-relative-directory-of-your-makefile
 MAKE_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -16,18 +16,18 @@ test: ## print test message
 	@dir=hoge; echo $$dir
 
 aem:
-	@docker build -t aem${AEM_VERSION} ./aem${AEM_VERSION}
+	@docker build -t aem${AEM} ./aem${AEM}
 
 prepare-docker-compose-yml:
 	@cp -f docker-compose.yml ${PREPARED_DOCKER_COMPOSE_YML}
-	@sed -i.back -e 's/{{AEM_VERSION}}/${AEM_VERSION}/' ${PREPARED_DOCKER_COMPOSE_YML}
+	@sed -i.back -e 's/{{AEM_VERSION}}/${AEM}/' ${PREPARED_DOCKER_COMPOSE_YML}
 	@sed -i.back -e 's|{{MAKE_ROOT}}|${MAKE_ROOT}|' ${PREPARED_DOCKER_COMPOSE_YML}
 	@cat .prepared.docker-compose.yml >&2
 
 build:
 	@make -s prepare-docker-compose-yml
 #	@cat /tmp/docker-compose.yml
-	@docker-compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM_IMAGE=aem${AEM_VERSION}
+	@docker-compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM=aem${AEM}
 
 up:
 	@make -s aem
@@ -70,7 +70,7 @@ local-author:
 		/usr/lib/jvm/jdk-11/bin/java -jar cq-quickstart.jar -unpack && \
 		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
 		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
-		/usr/lib/jvm/jdk-11/bin/java -jar ./aem-author-p4502.jar -forkargs -- -Xmx2024m
+		/usr/lib/jvm/jdk-11/bin/java -Xms4096m -Xmx4096m -XX:MaxPermSize=2034m -Djava.awt.headless=true -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1089 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar ./aem-author-p4502.jar -nofork
 
 local-author-mac:
 	@cd `mktemp -d` && \
@@ -82,6 +82,9 @@ local-author-mac:
 		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
 		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
 		java -jar ./aem-author-p4502.jar -forkargs -- -Xmx2024m
+
+exec-author:
+	docker exec -it `docker ps | grep author | awk '{print $$1}'` /bin/bash
 
 .PHONY: help
 

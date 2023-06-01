@@ -1,6 +1,6 @@
 # Use the previously created aem6.X.0
-ARG AEM_IMAGE=aem6.5.0
-FROM ${AEM_IMAGE}
+ARG AEM=aem6.5.0
+FROM ${AEM}
 
 # Expose AEM Publisher in port 4502
 EXPOSE 4503

@@ -10,14 +10,18 @@ WORKDIR /opt/aem
 # Copy Quickstart jar file
 COPY aem-sdk-quickstart.jar cq-quickstart.jar
 
-COPY jdk-11.0.17_linux-x64_bin.deb /tmp/jdk-11.0.17_linux-x64_bin.deb
+COPY jdk-11.0.19_linux-x64_bin.deb /tmp/jdk-11.0.19_linux-x64_bin.deb
 
 # Install Java
 # https://stackoverflow.com/a/54925400
-RUN apt-get update && \
-    apt-get install -y libasound2 && \
-    dpkg -i /tmp/jdk-11.0.17_linux-x64_bin.deb && \
-    update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 1
+RUN apt-get update
+RUN apt-get install -y nodejs maven
+RUN apt-get install -y libasound2
+RUN dpkg -i /tmp/jdk-11.0.19_linux-x64_bin.deb
+RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 11111
+
+RUN node -v
+RUN mvn -v
 
 # https://stackoverflow.com/questions/43655291/dynamically-set-java-home-of-docker-container
 RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
