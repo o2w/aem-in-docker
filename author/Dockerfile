@@ -7,6 +7,9 @@ FROM ${AEM}
 # Expose AEM author in port 4502
 EXPOSE 4502
 
+ENV TESTVAR=testvar
+ENV COMMERCE_ENDPOINT=
+
 RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
     echo $JAVA_HOME && \
     java -version
