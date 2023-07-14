@@ -1,6 +1,7 @@
 # template of Makefile
 #
-AEM=6.5.0
+#AEM=6.5.0
+AEM=acs
 
 #https://stackoverflow.com/questions/18136918/how-to-get-current-relative-directory-of-your-makefile
 MAKE_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -29,7 +30,7 @@ build:
 #	@cat /tmp/docker-compose.yml
 	@docker-compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM=aem${AEM}
 
-up:
+init:
 	@make -s aem
 	@make -s build
 	@make -s prepare-docker-compose-yml
@@ -55,7 +56,7 @@ tup: #Temporary UP
 rmtmp:
 	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
 
-disposable: # Create such images & containers & up
+up: # Create such images & containers & up
 	@make -s prepare-docker-compose-yml
 	-@docker ps -a | grep  -E 'tmp.*${PROJECT}' | awk '{print $$1}' | xargs docker rm
 	@./disposable.sh "${PROJECT}"
@@ -85,6 +86,9 @@ local-author-mac:
 
 exec-author:
 	docker exec -it `docker ps | grep author | awk '{print $$1}'` /bin/bash
+
+wknd:
+	@cd /tmp/ && git clone https://github.com/adobe/aem-guides-wknd && cd aem-guides-wknd && mvn clean install -PautoInstallSinglePackage -Pclassic
 
 .PHONY: help
 
