@@ -1,5 +1,11 @@
 # Using 'ubuntu' as the base image here
 FROM ubuntu
+ARG ACSSDK
+ARG JAVADEB
+
+
+RUN echo ${ACSSDK}
+RUN echo ${JAVADEB}
 
 # setting the working directory
 WORKDIR /opt/aem
@@ -8,16 +14,17 @@ WORKDIR /opt/aem
 #COPY license.properties .
 
 # Copy Quickstart jar file
-COPY aem-sdk-quickstart.jar cq-quickstart.jar
+COPY ${ACSSDK} cq-quickstart.jar
 
-COPY jdk-11.0.19_linux-x64_bin.deb /tmp/jdk-11.0.19_linux-x64_bin.deb
+
+COPY ${JAVADEB} /tmp/jdk-11.x.xx_linux-x64_bin.deb
 
 # Install Java
 # https://stackoverflow.com/a/54925400
 RUN apt-get update
 RUN apt-get install -y nodejs maven
 RUN apt-get install -y libasound2
-RUN dpkg -i /tmp/jdk-11.0.19_linux-x64_bin.deb
+RUN dpkg -i /tmp/jdk-11.x.xx_linux-x64_bin.deb
 RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 11111
 
 RUN node -v

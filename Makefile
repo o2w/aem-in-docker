@@ -17,7 +17,14 @@ test: ## print test message
 	@dir=hoge; echo $$dir
 
 aem:
-	@docker build -t aem${AEM} ./aem${AEM}
+	@javadeb=`cd ./aem${AEM}; ls | sort | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1` && \
+		acssdk=`cd ./aemacs; ls | sort | grep 'aem-sdk-quickstart' | tail -n1` && \
+		echo $$javadeb && \
+		echo $$acssdk && \
+		echo ''
+#		docker build -t aem${AEM} ./aem${AEM} --build-arg JAVADEB="$${javadeb}" --build-arg ACSSDK="$${acssdk}"
+#	@docker build -t aem${AEM} ./aem${AEM}
+#
 
 prepare-docker-compose-yml:
 	@cp -f docker-compose.yml ${PREPARED_DOCKER_COMPOSE_YML}

@@ -10,13 +10,14 @@ COPY license.properties .
 # Copy Quickstart jar file
 COPY cq-quickstart-6.5.0.jar cq-quickstart.jar
 
-COPY jdk-11.0.19_linux-x64_bin.deb /tmp/jdk-11.0.19_linux-x64_bin.deb
+
+COPY ${JAVADEB} /tmp/jdk-11.x.xx_linux-x64_bin.deb
 
 # Install Java
 # https://stackoverflow.com/a/54925400
 RUN apt-get update && \
     apt-get install -y libasound2 && \
-    dpkg -i /tmp/jdk-11.0.19_linux-x64_bin.deb && \
+    dpkg -i /tmp/jdk-11.x.xx_linux-x64_bin.deb && \
     update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 1
 
 RUN echo hoge
