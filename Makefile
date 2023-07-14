@@ -8,7 +8,7 @@ MAKE_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 PREPARED_DOCKER_COMPOSE_YML=.prepared.docker-compose.yml
 
-PROJECT=test
+PROJECT=default-${AEM}
 
 test: ## print test message
 	@echo 20180508
@@ -21,8 +21,8 @@ aem:
 		acssdk=`cd ./aemacs; ls | sort | grep 'aem-sdk-quickstart' | tail -n1` && \
 		echo $$javadeb && \
 		echo $$acssdk && \
-		echo ''
-#		docker build -t aem${AEM} ./aem${AEM} --build-arg JAVADEB="$${javadeb}" --build-arg ACSSDK="$${acssdk}"
+		docker build -t aem${AEM} ./aem${AEM} --build-arg JAVADEB="$${javadeb}" --build-arg ACSSDK="$${acssdk}"
+#		echo ''
 #	@docker build -t aem${AEM} ./aem${AEM}
 #
 
@@ -41,6 +41,9 @@ init:
 	@make -s aem
 	@make -s build
 	@make -s prepare-docker-compose-yml
+	@./install_packages.sh author custom/${PROJECT} &
+	@./install_packages.sh publish custom/${PROJECT} &
+	@echo "${AEM}" | grep '6.4' || ./install_wknd.sh &
 	@mkdir -p custom/${PROJECT} && \
 		cd custom/${PROJECT} && \
 		pwd && \
@@ -49,6 +52,8 @@ init:
 		dir=publish; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=dispatcher; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		docker-compose up
+
+#http://localhost:4502/libs/granite/operations/content/systemoverview.html
 
 tup: #Temporary UP
 	@make -s prepare-docker-compose-yml
