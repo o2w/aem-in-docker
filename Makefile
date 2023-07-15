@@ -17,6 +17,8 @@ test: ## print test message
 	@dir=hoge; echo $$dir
 
 aem:
+	@cd ./aem${AEM}; ls aem-sdk-2*.zip | xargs -I{} unzip -n {}
+#	@javadeb=`cat <(ls ./aem${AEM}) <(ls ./default) | sort -u | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1`
 	@javadeb=`cd ./aem${AEM}; ls | sort | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1` && \
 		acssdk=`cd ./aemacs; ls | sort | grep 'aem-sdk-quickstart' | tail -n1` && \
 		echo $$javadeb && \
