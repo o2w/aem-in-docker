@@ -13,7 +13,7 @@ await6x() {
     docker ps | grep acs && break
     curl -u admin:admin -F cmd=ls http://localhost:$port/crx/packmgr/service.jsp | grep '<name>aem-service-pkg' && break
     echo "Awaiting service pacakge installation" >&2
-    sleep 120
+    sleep 250
 	done
 
   while true; do
@@ -23,7 +23,7 @@ await6x() {
       break
     fi
     echo "Awaiting until package manager is up" >&2
-    sleep 240
+    sleep 250
     continue
   done
 }
