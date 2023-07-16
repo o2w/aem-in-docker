@@ -17,6 +17,7 @@ COPY jdk-8u351-linux-x64.tar.gz /tmp/jdk-8u351-linux-x64.tar.gz
 #TODO: unabailable repos
 #RUN apt-get update
 #RUN apt-get install -y libasound2
+#https://experienceleague.adobe.com/docs/experience-manager-64/deploying/introduction/technical-requirements.html?lang=en
 RUN mkdir -p /usr/lib/jvm
 RUN tar -xf /tmp/jdk-8u351-linux-x64.tar.gz -C /usr/lib/jvm/ && \
     update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_351/bin/java 1
