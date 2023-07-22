@@ -1,6 +1,7 @@
 #!/bin/bash
 
-wkndroot='/var/tmp/aem-guides-wknd'
+#wkndroot='/var/tmp/aem-guides-wknd'
+wkndroot="~/Documents/aem-guides-wknd"
 ls $wkndroot || git clone https://github.com/adobe/aem-guides-wknd $wkndroot
 
 
