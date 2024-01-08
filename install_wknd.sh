@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export JAVA_HOME="/usr/lib/jvm/jdk-11-oracle-x64"
 #wkndroot='/var/tmp/aem-guides-wknd'
 wkndroot="~/Documents/aem-guides-wknd"
 ls $wkndroot || git clone https://github.com/adobe/aem-guides-wknd $wkndroot
