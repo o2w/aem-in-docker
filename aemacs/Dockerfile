@@ -25,13 +25,13 @@ RUN apt-get update
 RUN apt-get install -y nodejs maven
 RUN apt-get install -y libasound2
 RUN dpkg -i /tmp/jdk-11.x.xx_linux-x64_bin.deb
-RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 11111
+RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11-oracle-x64/bin/java 11111
 
 RUN node -v
 RUN mvn -v
 
 # https://stackoverflow.com/questions/43655291/dynamically-set-java-home-of-docker-container
-RUN export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
+RUN export JAVA_HOME="/usr/lib/jvm/jdk-11-oracle-x64" && \
     echo $JAVA_HOME && \
     java --version && \
     java -jar cq-quickstart.jar -unpack
