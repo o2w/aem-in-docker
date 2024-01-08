@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 # Get the dispacher tar file and keepit inside 'dispacher' folder
 # https://experienceleague.adobe.com/docs/experience-manager-dispatcher/using/getting-started/release-notes.html?lang=en#system-requirements-and-prerequisites
-ADD https://download.macromedia.com/dispatcher/download/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz ./dispatcher/
+ADD https://download.macromedia.com/dispatcher/download/dispatcher-apache2.4-linux-x86_64-4.3.6.tar.gz ./dispatcher/
 
 # Extract the tar file and move it to Apache Modules folder with name mod_dispacher.so
 RUN tar -xzvf ./dispatcher/dispatcher-apache2.4-linux-x86_64-4.3.5.tar.gz -C ./dispatcher && \
