@@ -70,6 +70,16 @@ tup: #Temporary UP
 rmtmp:
 	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
 
+#https://forums.docker.com/t/how-to-delete-cache/5753/14
+rmcache:
+	@docker rmi $(shell docker images -a --filter=dangling=true -q)
+	@docker rm $(shell docker ps --filter=status=exited --filter=status=created -q)
+	@docker system prune -a
+	@docker builder prune
+
+login:
+	@docker exec -it $(shell docker ps | grep author | awk '{print $$1}') /bin/bash
+
 up: # Create such images & containers & up
 	@make -s prepare-docker-compose-yml
 	-@docker ps -a | grep  -E 'tmp.*${PROJECT}' | awk '{print $$1}' | xargs docker rm
