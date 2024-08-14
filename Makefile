@@ -37,7 +37,7 @@ prepare-docker-compose-yml:
 build:
 	@make -s prepare-docker-compose-yml
 #	@cat /tmp/docker-compose.yml
-	@docker-compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM=aem${AEM}
+	@docker compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM=aem${AEM}
 
 init:
 	@make -s aem
@@ -53,7 +53,7 @@ init:
 		dir=author; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=publish; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=dispatcher; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		docker-compose up
+		docker compose up
 
 #http://localhost:4502/libs/granite/operations/content/systemoverview.html
 
@@ -65,17 +65,20 @@ tup: #Temporary UP
 		dir=author; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=publish; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		dir=dispatcher; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		docker-compose up; docker-compose rm
+		docker compose up; docker compose rm
 
 rmtmp:
 	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
 
 #https://forums.docker.com/t/how-to-delete-cache/5753/14
-rmcache:
-	@docker rmi $(shell docker images -a --filter=dangling=true -q)
-	@docker rm $(shell docker ps --filter=status=exited --filter=status=created -q)
-	@docker system prune -a
-	@docker builder prune
+#https://stackoverflow.com/questions/45357771/stop-and-remove-all-docker-containers
+rm:
+	-@docker stop $(shell docker ps -a -q)
+	-@docker rm $(shell docker ps -a -q)
+	-@docker rmi $(shell docker images -a --filter=dangling=true -q)
+	-@docker rm $(shell docker ps --filter=status=exited --filter=status=created -q)
+	-@docker system prune -a
+	-@docker builder prune
 
 login:
 	@docker exec -it $(shell docker ps | grep author | awk '{print $$1}') /bin/bash
