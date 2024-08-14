@@ -20,4 +20,5 @@ RUN test -f "./cq-quickstart.jar" && mv ./cq-quickstart.jar ./aem-author-p4502.j
 #https://stackoverflow.com/questions/22634644/java-hotspottm-64-bit-server-vm-warning-ignoring-option-maxpermsize
 
 # Make the container start always in Author mode with Port 4502
-ENTRYPOINT ["java", "-Xmx4048m", "-server",  "-Djava.awt.headless=true", "-jar", "aem-author-p4502.jar", "-forkargs", "--", "-Xmx4048m" ]
+#ENTRYPOINT ["java", "-Xmx4048m", "-server",  "-Djava.awt.headless=true", "-jar", "aem-author-p4502.jar", "-forkargs", "--", "-Xmx4048m" ]
+ENTRYPOINT ["/ep.sh"]
