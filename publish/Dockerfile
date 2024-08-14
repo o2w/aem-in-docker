@@ -5,7 +5,7 @@ FROM ${AEM}
 # Expose AEM Publisher in port 4502
 EXPOSE 4503
 
-RUN export JAVA_HOME="/usr/lib/jvm/jdk-11-oracle-x64" && \
+RUN export JAVA_HOME="`ls /usr/lib/jvm/* | grep oracle | sort | tr -d ':' | head -n1`" && \
     echo $JAVA_HOME && \
     java -version
 

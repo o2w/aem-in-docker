@@ -30,7 +30,7 @@ RUN node -v
 RUN mvn -v
 
 # https://stackoverflow.com/questions/43655291/dynamically-set-java-home-of-docker-container
-RUN export JAVA_HOME="/usr/lib/jvm/jdk-11-oracle-x64" && \
+RUN export JAVA_HOME="`ls /usr/lib/jvm/* | grep oracle | sort | tr -d ':' | head -n1`" && \
     echo $JAVA_HOME && \
     java --version && \
     java -jar cq-quickstart.jar -unpack

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export JAVA_HOME="/usr/lib/jvm/jdk-11-oracle-x64"
+export JAVA_HOME="`ls /usr/lib/jvm/* | grep oracle | sort | tr -d ':' | head -n1`"
 #wkndroot='/var/tmp/aem-guides-wknd'
-wkndroot="~/Documents/aem-guides-wknd"
+wkndroot="/tmp/aem-guides-wknd"
 ls $wkndroot || git clone https://github.com/adobe/aem-guides-wknd $wkndroot
 
 

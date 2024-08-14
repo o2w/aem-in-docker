@@ -10,7 +10,7 @@ EXPOSE 4502
 ENV TESTVAR=testvar
 ENV COMMERCE_ENDPOINT=
 
-RUN export JAVA_HOME="/usr/lib/jvm/jdk-11-oracle-x64" && \
+RUN export JAVA_HOME="`ls /usr/lib/jvm/* | grep oracle | sort | tr -d ':' | head -n1`" && \
     echo $JAVA_HOME && \
     java -version
 
