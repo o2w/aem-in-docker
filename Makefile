@@ -12,11 +12,8 @@ PROJECT=default-${AEM}
 
 test: ## print test message
 	@echo 20180508
-	@echo 2018/05/09
-	@echo 2018-05-11
-	@dir=hoge; echo $$dir
 
-aem:
+aem: ## Build base image ofAEM
 	@cd ./aem${AEM}; ls aem-sdk-2*.zip | xargs -I{} unzip -n {}
 #	@javadeb=`cat <(ls ./aem${AEM}) <(ls ./default) | sort -u | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1`
 	@javadeb=`cd ./aem${AEM}; ls | sort | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1` && \
@@ -28,18 +25,17 @@ aem:
 #	@docker build -t aem${AEM} ./aem${AEM}
 #
 
-prepare-docker-compose-yml:
+prepare-docker-compose-yml: ##Create tailord docker-compose.yml for given condition
 	@cp -f docker-compose.yml ${PREPARED_DOCKER_COMPOSE_YML}
 	@sed -i.back -e 's/{{AEM_VERSION}}/${AEM}/' ${PREPARED_DOCKER_COMPOSE_YML}
 	@sed -i.back -e 's|{{MAKE_ROOT}}|${MAKE_ROOT}|' ${PREPARED_DOCKER_COMPOSE_YML}
 	@cat .prepared.docker-compose.yml >&2
 
-build:
+build: ##execute docker compose with configuration
 	@make -s prepare-docker-compose-yml
-#	@cat /tmp/docker-compose.yml
 	@docker compose -f ${PREPARED_DOCKER_COMPOSE_YML} build --build-arg AEM=aem${AEM}
 
-init:
+init: ## Initiate a set of instances/containers
 	@make -s aem
 	@make -s build
 	@make -s prepare-docker-compose-yml
@@ -55,24 +51,12 @@ init:
 		dir=dispatcher; mkdir -p $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
 		docker compose up
 
+#Access below url to browse what's up
 #http://localhost:4502/libs/granite/operations/content/systemoverview.html
-
-tup: #Temporary UP
-	@make -s prepare-docker-compose-yml
-	@cd `mktemp -d` && \
-		pwd && \
-		cp -rav ${MAKE_ROOT}/${PREPARED_DOCKER_COMPOSE_YML} ./docker-compose.yml && \
-		dir=author; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		dir=publish; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		dir=dispatcher; mkdir $$dir && cp -a ${MAKE_ROOT}/$$dir/Dockerfile ./$$dir && \
-		docker compose up; docker compose rm
-
-rmtmp:
-	@docker ps -a | grep -E ' tmp.+' | awk '{print $$NF}' | xargs docker rm
 
 #https://forums.docker.com/t/how-to-delete-cache/5753/14
 #https://stackoverflow.com/questions/45357771/stop-and-remove-all-docker-containers
-rm:
+rm: ## Remove all images available. Beaware not only the one made from this script
 	-@docker stop $(shell docker ps -a -q)
 	-@docker rm $(shell docker ps -a -q)
 	-@docker rmi $(shell docker images -a --filter=dangling=true -q)
@@ -83,22 +67,10 @@ rm:
 login:
 	@docker exec -it $(shell docker ps | grep author | awk '{print $$1}') /bin/bash
 
-up: # Create such images & containers & up
+up: # Create a copy of containers from existing ones and launch. Originals would completely kept behind and temporal containers will be gone in the end
 	@make -s prepare-docker-compose-yml
 	-@docker ps -a | grep  -E 'tmp.*${PROJECT}' | awk '{print $$1}' | xargs docker rm
 	@./disposable.sh "${PROJECT}"
-
-local-author:
-	@cd `mktemp -d` && \
-		pwd && \
-		echo ${MAKE_ROOT} && \
-		export JAVA_HOME="/usr/lib/jvm/jdk-11" && \
-		/usr/lib/jvm/jdk-11/bin/java -version && \
-		cp ${MAKE_ROOT}/aemacs/aem-sdk-quickstart.jar ./cq-quickstart.jar && \
-		/usr/lib/jvm/jdk-11/bin/java -jar cq-quickstart.jar -unpack && \
-		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
-		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
-		/usr/lib/jvm/jdk-11/bin/java -Xms4096m -Xmx4096m -XX:MaxPermSize=2034m -Djava.awt.headless=true -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1089 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar ./aem-author-p4502.jar -nofork
 
 local-author-mac:
 	@cd `mktemp -d` && \
@@ -110,12 +82,6 @@ local-author-mac:
 		cp -r ${MAKE_ROOT}/aemacs/install ./crx-quickstart/ && \
 		mv ./cq-quickstart.jar ./aem-author-p4502.jar && \
 		java -jar ./aem-author-p4502.jar -forkargs -- -Xmx2024m
-
-exec-author:
-	docker exec -it `docker ps | grep author | awk '{print $$1}'` /bin/bash
-
-wknd:
-	@cd /tmp/ && git clone https://github.com/adobe/aem-guides-wknd && cd aem-guides-wknd && mvn clean install -PautoInstallSinglePackage -Pclassic
 
 .PHONY: help
 
