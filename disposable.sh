@@ -82,8 +82,8 @@ sed -i.back -e "s/{{REPOSITORY}}/${dispatcher_tag}/g" ./dispatcher/Dockerfile
 cat docker-compose.yml
 cat ./**/Dockerfile
 
-docker-compose up
-docker-compose rm -f
+docker compose up
+docker compose rm -f
 
 docker rmi "`get_image_id $author_commit`"
 docker rmi "`get_image_id $publish_commit`"
