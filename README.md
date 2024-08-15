@@ -1,13 +1,11 @@
 # Local AEM Buildup
 
-* Builds set of AEM instances of author, publish, dispatcher based on Docker container
-* Can easily build separate sets by projects
-* Auto installation of preconfigured packages through scripting
+* Builds set of AEM instances of author, publish, dispatcher based on Docker containers
+* Can easily build separate sets project by project
+* Prespecified packages can automatically be installed via curl script kicks package manager
 
 * So each set of instances can be dedicated to project instead of multi tenants in single AEM
-* So each set can be reproduced by minmized effort
-* So such sets can be more disposable
-* So instances can be reproduced from scratch with the latest SDK jar or SP installations, in minmized effort. Especially with Cloud SDK quickstart jar which is recommended to keep updated
+* So each set can be more disposable and reproduced cleanly against any changes have made, by minmized effort
 
 ## Prerequisites
 
