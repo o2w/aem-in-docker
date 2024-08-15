@@ -1,5 +1,3 @@
-# template of Makefile
-#
 AEM=acs
 
 #https://stackoverflow.com/questions/18136918/how-to-get-current-relative-directory-of-your-makefile
