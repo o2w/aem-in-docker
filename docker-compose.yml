@@ -1,19 +1,22 @@
 version: '3'
 services:
   author:
-    image: aem-author
-    build: ./aem-author
-    ports:
-      - "4502:4502"
+    image: author{{AEM_VERSION}}
+    build: {{MAKE_ROOT}}/author
+    network_mode: "host"
+      #ports:
+      #  - "4502:4502"
   publish:
-    image: aem-publish
-    build: ./aem-publish
-    ports:
-      - "4503:4503"
+    image: publish{{AEM_VERSION}}
+    build: {{MAKE_ROOT}}/publish
+    network_mode: "host"
+      #ports:
+      #  - "4503:4503"
   dispatcher:
-    image: aem-dispatcher
-    build: ./aem-dispatcher
-    ports:
-      - "80:80"
+    image: dispatcher{{AEM_VERSION}}
+    build: {{MAKE_ROOT}}/dispatcher
+    network_mode: "host"
+      #ports:
+      #  - "80:80"
     depends_on:
-      - "aem-publish"
+      - "publish"
