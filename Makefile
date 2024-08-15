@@ -10,7 +10,7 @@ PROJECT=eval.${AEM}
 test: ## print test message
 	@echo 20180508
 
-aem: ## Build base image ofAEM
+aem: ## Build base image of AEM
 	@cd ./aem${AEM}; ls aem-sdk-2*.zip | xargs -I{} unzip -n {}
 	@javadeb=`cd ./aem${AEM}; ls | sort | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1` && \
 		acssdk=`cd ./aemacs; ls | sort | grep 'aem-sdk-quickstart' | tail -n1` && \
