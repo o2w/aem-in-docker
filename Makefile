@@ -1,6 +1,5 @@
 # template of Makefile
 #
-#AEM=6.5.0
 AEM=acs
 
 #https://stackoverflow.com/questions/18136918/how-to-get-current-relative-directory-of-your-makefile
@@ -8,22 +7,18 @@ MAKE_ROOT:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 PREPARED_DOCKER_COMPOSE_YML=.prepared.docker-compose.yml
 
-PROJECT=default-${AEM}
+PROJECT=eval.${AEM}
 
 test: ## print test message
 	@echo 20180508
 
 aem: ## Build base image ofAEM
 	@cd ./aem${AEM}; ls aem-sdk-2*.zip | xargs -I{} unzip -n {}
-#	@javadeb=`cat <(ls ./aem${AEM}) <(ls ./default) | sort -u | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1`
 	@javadeb=`cd ./aem${AEM}; ls | sort | grep -E '(jdk-11.*\.deb|jdk-8.*\.tar\.gz)' | tail -n1` && \
 		acssdk=`cd ./aemacs; ls | sort | grep 'aem-sdk-quickstart' | tail -n1` && \
 		echo $$javadeb && \
 		echo $$acssdk && \
 		docker build -t aem${AEM} ./aem${AEM} --build-arg JAVADEB="$${javadeb}" --build-arg ACSSDK="$${acssdk}"
-#		echo ''
-#	@docker build -t aem${AEM} ./aem${AEM}
-#
 
 prepare-docker-compose-yml: ##Create tailord docker-compose.yml for given condition
 	@cp -f docker-compose.yml ${PREPARED_DOCKER_COMPOSE_YML}
@@ -38,7 +33,6 @@ build: ##execute docker compose with configuration
 init: ## Initiate a set of instances/containers
 	@make -s aem
 	@make -s build
-	@make -s prepare-docker-compose-yml
 	@./install_packages.sh author custom/${PROJECT} &
 	@./install_packages.sh publish custom/${PROJECT} &
 	@echo "${AEM}" | grep '6.4' || ./install_wknd.sh &
@@ -87,11 +81,4 @@ local-author-mac:
 
 help: ## print about the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
-#.DEFAULT_GOAL := help
-# https://postd.cc/auto-documented-makefile/
-# https://www.gnu.org/software/make/manual/make.html#Standard-Targets
-
-#https://kanasys.com/tech/522
-##!/bin/bash
-#make -j -f <(tail -n+$(expr $LINENO + 1) $0) $@ ;exit 0
 
