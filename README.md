@@ -39,3 +39,7 @@ https://digitalvarys.com/create-aem-in-docker-with-docker-compose/
 https://www.aemcq5tutorials.com/tutorials/adobe-cq5-aem-curl-commands/
 https://experienceleague.adobe.com/docs/experience-cloud-kcs/kbarticles/KA-17456.html?lang=en
 https://experienceleague.adobe.com/docs/experience-manager-65/administering/operations/curl.html?lang=ja
+
+todo
+
+https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-17454
